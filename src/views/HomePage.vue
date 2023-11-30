@@ -33,7 +33,7 @@
 
       </ion-header>
       <div id="container">
-        <ion-button color="primary" fill="solid" @click="tap">
+        <ion-button id="tapMeButton" color="primary" fill="solid" @click="tap">
           Tocam
         </ion-button>
       </div>
@@ -54,7 +54,7 @@ import {
   alertController,
   IonGrid,
   IonRow,
-  IonCol, toastController,
+  IonCol, toastController, createAnimation,
 
 } from '@ionic/vue';
 import { informationCircleOutline } from "ionicons/icons";
@@ -101,6 +101,13 @@ export default defineComponent({
     }
   },
   methods: {
+    bounce() {
+      const animation = createAnimation()
+      animation.addElement(document.getElementById('tapMeButton'))
+          .duration(200)
+          .fromTo('transform','scale(1.2)','scale(1.0)')
+      animation.play();
+    },
     async info () {
       const alert = await alertController
           .create({
@@ -112,6 +119,7 @@ export default defineComponent({
       await alert.present();
       },
     async tap () {
+      this.bounce()
       this.score++
       if (!this.started) {
         this.counterInterval = setInterval(() => {
