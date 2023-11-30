@@ -1,7 +1,7 @@
 <template>
   <ion-page>
     <ion-header :translucent="true">
-      <ion-toolbar>
+      <ion-toolbar color="primary">
         <ion-buttons slot="primary">
           <ion-button color="primary" fill="solid" @click="info">
             <ion-icon :icon="infoIcon"></ion-icon>
@@ -11,12 +11,12 @@
       </ion-toolbar>
     </ion-header>
 
-    <ion-content :fullscreen="true">
+    <ion-content :fullscreen="true" color="secondary">
       <ion-header class="ion-no-border ion-padding-top ion-padding-horizontal">
         <ion-grid>
           <ion-row>
             <ion-col>
-              <div class="ion-text-start">
+              <div class="ion-text-start" id="score">
                 Puntuació: {{ score }}
               </div>
             </ion-col>
@@ -60,7 +60,7 @@ import {
 import { informationCircleOutline } from "ionicons/icons";
 import { defineComponent } from "vue";
 
-const INITIAL_TIME = 5
+const INITIAL_TIME = 60
 export default defineComponent({
   name: 'Home',
   components: {
@@ -108,6 +108,30 @@ export default defineComponent({
           .fromTo('transform','scale(1.2)','scale(1.0)')
       animation.play();
     },
+    blink() {
+      const animation = createAnimation()
+      animation.addElement(document.getElementById('score'))
+          .duration(400)
+          .fromTo('opacity','0','1')
+      animation.play();
+    },
+    mel() {
+      const screenWidth = window.innerWidth;
+      const screenHeight = window.innerHeight;
+
+      const melWord = document.createElement('div');
+      melWord.textContent = 'mel';
+      melWord.style.position = 'absolute';
+      melWord.style.left = `${Math.random() * screenWidth}px`;
+      melWord.style.top = `${Math.random() * screenHeight}px`;
+      melWord.style.color = '#' + Math.floor(Math.random() * 16777215).toString(16);
+
+      document.body.appendChild(melWord);
+
+      setTimeout(() => {
+        melWord.remove();
+      }, 3000);
+    },
     async info () {
       const alert = await alertController
           .create({
@@ -120,7 +144,9 @@ export default defineComponent({
       },
     async tap () {
       this.bounce()
+      this.blink()
       this.score++
+      this.mel()
       if (!this.started) {
         this.counterInterval = setInterval(() => {
           this.timeLeft--
