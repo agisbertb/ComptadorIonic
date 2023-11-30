@@ -2,28 +2,112 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-buttons slot="primary">
+          <ion-button color="primary" fill="solid" @click="info">
+            <ion-icon :icon="infoIcon"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+        <ion-title>Comptador</ion-title>
       </ion-toolbar>
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Blank</ion-title>
-        </ion-toolbar>
-      </ion-header>
+      <ion-header class="ion-no-border ion-padding-top ion-padding-horizontal">
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <div class="ion-text-start">
+                Puntuació: {{ score }}
+              </div>
+            </ion-col>
 
+            <ion-col>
+              <div class="ion-text-end">
+                Temps restant: {{ timeLeft }}
+              </div>
+            </ion-col>
+
+          </ion-row>
+
+        </ion-grid>
+
+      </ion-header>
       <div id="container">
-        <strong>Ready to create an app?</strong>
-        <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+        <ion-button color="primary" fill="solid" @click="tap">
+          Tocam
+        </ion-button>
       </div>
     </ion-content>
   </ion-page>
 </template>
 
-<script setup lang="ts">
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/vue';
+<script>
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonButtons,
+  IonButton,
+  IonIcon,
+  alertController,
+  IonGrid,
+  IonRow,
+  IonCol, toastController,
+
+} from '@ionic/vue';
+import { informationCircleOutline } from "ionicons/icons";
+import { defineComponent } from "vue";
+
+export default defineComponent({
+  name: 'Home',
+  components: {
+    IonContent,
+    IonHeader,
+    IonPage,
+    IonTitle,
+    IonToolbar,
+    IonButtons,
+    IonButton,
+    IonIcon,
+    IonGrid,
+    IonRow,
+    IonCol
+  },
+  setup () {
+    return {
+      infoIcon: informationCircleOutline,
+      score: 0,
+      timeLeft: 60
+  }
+  },
+  methods: {
+    async info () {
+      const alert = await alertController
+          .create({
+            header: 'Comptador 1.0',
+            subHeader: 'Creat per Andreu Gisbert Bel',
+            message: 'Github: https://github.com/agisbertb/ComptadorIonic',
+            buttons: ['OK'],
+          });
+      await alert.present();
+      },
+    async tap () {
+      const toast = await toastController.create({
+        color: 'dark',
+        duration: 2000,
+        message: 'AAAAAAAAAAAAAAAAAAAA',
+        showCloseButton: true
+      });
+      await toast.present()
+    }
+    }
+});
+
 </script>
+
+
 
 <style scoped>
 #container {
